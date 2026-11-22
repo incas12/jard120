@@ -1,0 +1,50 @@
+plugins {
+    id 'com.android.application'
+}
+
+def numeroBuild = Integer.parseInt(System.getenv('GITHUB_RUN_NUMBER') ?: '1')
+
+android {
+    namespace 'pt.jardim.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'pt.jardim.app'
+        minSdk 29
+        targetSdk 34
+        versionCode numeroBuild
+        versionName "1.${numeroBuild}"
+    }
+
+    // Chave fixa: permite instalar versões novas por cima, sem perder os dados.
+    signingConfigs {
+        jardim {
+            storeFile file('../jardim.keystore')
+            storePassword 'jardim2026'
+            keyAlias 'jardim'
+            keyPassword 'jardim2026'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.jardim
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.11.0'
+    implementation 'androidx.core:core:1.13.1'
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="verde">#24502F</color>
+    <style name="Tema" parent="android:Theme.DeviceDefault.DayNight">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/verde</item>
+        <item name="android:navigationBarColor">@color/verde</item>
+    </style>
+</resources>

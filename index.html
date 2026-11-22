@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#24502f">
+<meta name="description" content="Catálogo pessoal das plantas do jardim">
+<title>O Meu Jardim</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+/*
+VOICE: calmo, prático, de caderno de jardinagem
+IDEA: fichas de herbário — cada planta é um cartão com foto e etiqueta
+PICTURE: a própria lista de plantas com fotos grandes; calendário de meses no detalhe
+COLOUR and TYPE: verde-folha dominante, fundo claro esverdeado, acento amarelo-girassol; tipo do sistema, nomes científicos em itálico
+LAYOUT: barra verde no topo, coluna única até 720px, botão + flutuante
+*/
+:root{color-scheme:light dark;
+--bg:light-dark(#f3f6f1,#111813);--card:light-dark(#ffffff,#1a231c);--ink:light-dark(#18261b,#e6eee6);
+--muted:light-dark(#5b6b5e,#9aab9d);--line:light-dark(#dce4da,#2a362d);--leaf:#24502f;--leaf2:light-dark(#3d7a4a,#6fb07d);
+--sun:#f2b705;--danger:#b3261e;
+--c-sementeira:#9c6b3c;--c-plantacao:#3d8b4f;--c-poda:#7a5ea8;--c-adubacao:#d18a12}
+*{box-sizing:border-box;min-width:0}
+html{-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:clip;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+header.top{position:sticky;top:0;z-index:5;background:var(--leaf);color:#fff;padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;display:flex;align-items:center;gap:8px;min-height:60px;box-shadow:0 2px 8px #0003}
+header.top h1{font-size:20px;margin:0;flex:1;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{width:44px;height:44px;border:0;border-radius:50%;background:transparent;color:inherit;display:grid;place-items:center;cursor:pointer;flex:none}
+.ib:active{background:#ffffff26}.ib svg{width:24px;height:24px}
+main{max-width:720px;margin:0 auto;padding:14px 14px 110px}
+.search{width:100%;height:48px;border-radius:24px;border:1px solid var(--line);background:var(--card);padding:0 18px;font-size:16px}
+.search:focus,.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--leaf2);outline-offset:1px}
+.mes{margin:14px 0 4px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--sun);border-radius:12px;padding:12px 14px}
+.mes h2{font-size:15px;margin:0 0 6px}.mes p{margin:2px 0;font-size:14px}.mes b{font-weight:600}
+.count{color:var(--muted);font-size:14px;margin:14px 2px 8px}
+.list{display:grid;gap:10px}
+.item{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px;text-decoration:none;color:inherit}
+.item:active{transform:scale(.99)}
+.thumb{width:76px;height:76px;border-radius:10px;object-fit:cover;flex:none;background:var(--line)}
+.ph{display:grid;place-items:center;color:var(--leaf2)}.ph svg{width:40%;height:40%}
+.item .t{flex:1}.item h3{margin:0;font-size:17px;line-height:1.25}
+.sci{font-style:italic;color:var(--muted);font-size:14px}
+.meta{font-size:13px;color:var(--muted);margin-top:2px}
+.fab{position:fixed;right:max(18px,calc(50vw - 342px));bottom:calc(20px + env(safe-area-inset-bottom));width:62px;height:62px;border-radius:20px;border:0;background:var(--sun);color:#1b1b0f;box-shadow:0 4px 14px #0004;display:grid;place-items:center;cursor:pointer;text-decoration:none}
+.fab svg{width:30px;height:30px}
+.empty{text-align:center;color:var(--muted);padding:60px 20px}.empty svg{width:90px;height:90px;color:var(--leaf2);opacity:.6}
+.hero{width:calc(100% + 28px);margin:-14px -14px 0;aspect-ratio:4/3;max-height:52vh;object-fit:cover;display:block;background:var(--line)}
+.hero.ph{height:160px;aspect-ratio:auto}
+.dt h2{font-size:28px;line-height:1.1;margin:16px 0 2px}.dt .sci{font-size:17px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:4px 12px;font-size:14px}
+.chip small{color:var(--muted)}
+section.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:14px 0}
+section.box h3{margin:0 0 10px;font-size:16px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.cal{width:100%;border-collapse:separate;border-spacing:2px;table-layout:fixed;font-size:12px}
+.cal th{font-weight:500;color:var(--muted);padding:2px 0}.cal th.now{color:var(--ink);font-weight:700}
+.cal th:first-child{width:84px}
+.cal td.l{font-size:13px;padding-right:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal td.m{height:20px;border-radius:4px;background:var(--line)}
+.cal td.now{outline:2px solid var(--sun);outline-offset:-1px}
+.var{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);text-decoration:none;color:inherit}
+.var:first-of-type{border-top:0}
+.var .thumb{width:56px;height:56px}
+.var b{display:block;font-weight:600}
+.num{margin-left:auto;text-align:right;font-weight:700;font-size:20px;white-space:nowrap}.num small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.btn{min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:0 16px;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;color:inherit}
+.btn.pri{background:var(--leaf);color:#fff;border-color:var(--leaf)}
+.btn.dan{color:var(--danger);border-color:currentColor;background:transparent}
+.btn.sm{min-height:38px;padding:0 12px;font-size:14px}
+.btn.w{width:100%}
+.f label{display:block;font-size:14px;font-weight:600;margin:14px 0 4px}
+.f input:not([type=file]),.f select,.f textarea{width:100%;min-height:48px;border-radius:10px;border:1px solid var(--line);background:var(--card);padding:10px 12px;font-size:16px}
+.f textarea{min-height:90px;resize:vertical}
+.f .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.f fieldset{border:1px solid var(--line);border-radius:14px;padding:4px 14px 14px;margin:18px 0;background:var(--card)}
+.f legend{font-weight:700;padding:0 6px}
+.hint{font-size:13px;color:var(--muted);margin:4px 0 0}
+.photo{display:flex;gap:12px;align-items:center}
+.photo .thumb{width:96px;height:96px}
+.photo input{display:none}
+.months{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.months button{min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--bg);cursor:pointer;font-size:14px}
+.months button[aria-pressed=true]{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:700}
+.act{margin-top:12px}.act b{display:flex;align-items:center;gap:8px;font-size:14px;margin-bottom:6px}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--ac);flex:none}
+.actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}.actions .btn{flex:1}
+.notes{white-space:pre-wrap;margin:0}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#1d2b20;color:#fff;padding:10px 18px;border-radius:22px;font-size:15px;z-index:20;box-shadow:0 4px 14px #0005;max-width:90vw}
+dialog{border:0;border-radius:18px;padding:20px;max-width:340px;background:var(--card);color:var(--ink)}
+dialog::backdrop{background:#0008}
+dialog p{margin:0 0 18px;white-space:pre-line}dialog .actions{margin-top:0}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted);margin-top:8px}.legend span{display:flex;align-items:center;gap:6px}
+@media (prefers-reduced-motion:no-preference){main{animation:in .18s ease-out}@keyframes in{from{opacity:0;transform:translateY(6px)}}}
+</style>
+</head>
+<body>
+<header class="top">
+  <button class="ib" id="back" aria-label="Voltar" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <h1 id="title">O Meu Jardim</h1>
+  <span id="hact"></span>
+</header>
+<main id="app"></main>
+<dialog id="dlg"><p id="dlgMsg"></p><div class="actions"><button class="btn" id="dlgNo">Cancelar</button><button class="btn pri" id="dlgYes">Confirmar</button></div></dialog>
+<script src="app.js"></script>
+</body>
+</html>
